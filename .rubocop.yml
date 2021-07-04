@@ -1,0 +1,60 @@
+inherit_from: .rubocop_todo.yml
+
+require:
+  - rubocop-packaging
+  - rubocop-performance
+
+AllCops:
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  TargetRubyVersion: 2.4
+  SuggestExtensions: false
+  NewCops: enable
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*.rb
+    - examples/**/*.rb
+
+Layout/EmptyLinesAroundAttributeAccessor: # (0.83)
+  Enabled: true
+
+Layout/LineLength:
+  Exclude:
+    - spec/**/*.rb
+    - examples/**/*.rb
+
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+Lint/DeprecatedOpenSSLConstant: # (0.84)
+  Enabled: true
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/Documentation:
+  Exclude:
+    - 'spec/**/*'
+    - 'examples/**/*'
+
+Style/ExponentialNotation:
+  Enabled: true
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/SlicingWithRange: # (0.83)
+  Enabled: true
+

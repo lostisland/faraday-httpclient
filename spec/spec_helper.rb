@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 require 'faraday'
-require 'faraday/my_adapter'
-# This is the magic bit. It requires a tests suite from the Faraday gem that you can run against your adapter
+require 'faraday/httpclient'
 require 'faraday_specs_setup'
 
 RSpec.configure do |config|
