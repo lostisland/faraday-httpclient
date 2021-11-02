@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'httpclient'
+require 'faraday'
 require_relative 'adapter/httpclient'
 require_relative 'httpclient/version'
 

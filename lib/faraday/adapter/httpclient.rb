@@ -7,8 +7,6 @@ module Faraday
     # * Initialize and store internally the client you chose (e.g. Net::HTTP)
     # * Process requests and save the response (see `#call`)
     class HTTPClient < Faraday::Adapter
-      dependency 'httpclient'
-
       def build_connection(env)
         @client ||= ::HTTPClient.new.tap do |cli|
           # enable compression
