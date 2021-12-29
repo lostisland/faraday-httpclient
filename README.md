@@ -22,15 +22,15 @@ Or install them yourself as:
 
 ## Usage
 
-Configure your Faraday connection to use this adapter like this:
-
 ```ruby
-connection = Faraday.new(url, conn_options) do |conn|
-  conn.adapter(:httpclient)
+conn = Faraday.new(...) do |f|
+  f.adapter :httpclient do |client|
+    # yields HTTPClient
+    client.keep_alive_timeout = 20
+    client.ssl_config.timeout = 25
+  end
 end
 ```
-
-For more information on how to setup your Faraday connection and adapters usage, please refer to the [Faraday Website][faraday-website].
 
 ## Development
 
@@ -51,7 +51,6 @@ The gem is available as open source under the terms of the [license][license].
 Everyone interacting in the Faraday HTTPClient adapter project's codebase, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct][code-of-conduct].
 
 [faraday]: https://github.com/lostisland/faraday
-[faraday-website]: https://lostisland.github.io/faraday
 [httpclient]: https://github.com/nahi/httpclient
 [rubygems]: https://rubygems.org
 [repo]: https://github.com/lostisland/faraday-httpclient
