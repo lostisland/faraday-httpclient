@@ -9,7 +9,7 @@ Every adapter is defined into its own gem. This gem defines the adapter for HTTP
 Add these lines to your application's Gemfile:
 
 ```ruby
-gem 'faraday-httpclient'
+gem 'faraday-httpclient', '~> 2.0'
 ```
 
 And then execute:
@@ -18,11 +18,13 @@ And then execute:
 
 Or install them yourself as:
 
-    $ gem install faraday-httpclient
+    $ gem install faraday-httpclient -v '~> 2.0'
 
 ## Usage
 
 ```ruby
+require 'faraday/httpclient'
+
 conn = Faraday.new(...) do |f|
   f.adapter :httpclient do |client|
     # yields HTTPClient
