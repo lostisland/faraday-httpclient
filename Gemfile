@@ -3,6 +3,8 @@
 source 'https://rubygems.org'
 gemspec
 
+gem 'faraday', '>= 1.0'
+
 gem 'rake', '~> 13.0'
 gem 'rspec', '~> 3.0'
 gem 'simplecov', '~> 0.19.0'
