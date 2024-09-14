@@ -101,6 +101,11 @@ module Faraday
         ssl_config.add_trust_ca ssl[:ca_path] if ssl[:ca_path]
         ssl_config.client_cert = ssl[:client_cert] if ssl[:client_cert]
         ssl_config.client_key = ssl[:client_key] if ssl[:client_key]
+
+        if support_ciphers?(ssl)
+          ssl_config.ciphers = ssl[:ciphers]
+        end
+
         ssl_config.verify_depth = ssl[:verify_depth] if ssl[:verify_depth]
       end
 
@@ -146,6 +151,13 @@ module Faraday
             OpenSSL::SSL::VERIFY_NONE
           end
         end
+      end
+
+      private
+
+      def support_ciphers?(ssl_param)
+        Gem::Version.new(Faraday::VERSION) >= Gem::Version.new('2.11.0') &&
+          ssl_param.respond_to?(:ciphers=)
       end
     end
   end
