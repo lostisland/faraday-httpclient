@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'faraday/httpclient/ssl_configurator'
+
 module Faraday
   class Adapter
     # This class provides the main implementation for your adapter.
@@ -26,7 +28,7 @@ module Faraday
         end
 
         if env[:url].scheme == 'https' && (ssl = env[:ssl])
-          configure_ssl @client, ssl
+          ::Faraday::HTTPClient::SSLConfigurator.configure @client, ssl
         end
 
         configure_client @client
@@ -91,24 +93,6 @@ module Faraday
         client.set_proxy_auth(proxy[:user], proxy[:password])
       end
 
-      # @param ssl [Hash]
-      def configure_ssl(client, ssl)
-        ssl_config = client.ssl_config
-        ssl_config.verify_mode = ssl_verify_mode(ssl)
-        ssl_config.cert_store = ssl_cert_store(ssl)
-
-        ssl_config.add_trust_ca ssl[:ca_file] if ssl[:ca_file]
-        ssl_config.add_trust_ca ssl[:ca_path] if ssl[:ca_path]
-        ssl_config.client_cert = ssl[:client_cert] if ssl[:client_cert]
-        ssl_config.client_key = ssl[:client_key] if ssl[:client_key]
-
-        if support_ciphers?(ssl)
-          ssl_config.ciphers = ssl[:ciphers]
-        end
-
-        ssl_config.verify_depth = ssl[:verify_depth] if ssl[:verify_depth]
-      end
-
       # @param req [Hash]
       def configure_timeouts(client, req)
         if (sec = request_timeout(:open, req))
@@ -126,38 +110,6 @@ module Faraday
 
       def configure_client(client)
         @config_block&.call(client)
-      end
-
-      # @param ssl [Hash]
-      # @return [OpenSSL::X509::Store]
-      def ssl_cert_store(ssl)
-        return ssl[:cert_store] if ssl[:cert_store]
-
-        # Memoize the cert store so that the same one is passed to
-        # HTTPClient each time, to avoid resyncing SSL sessions when
-        # it's changed
-
-        # Use the default cert store by default, i.e. system ca certs
-        @ssl_cert_store ||= OpenSSL::X509::Store.new.tap(&:set_default_paths)
-      end
-
-      # @param ssl [Hash]
-      def ssl_verify_mode(ssl)
-        ssl[:verify_mode] || begin
-          if ssl.fetch(:verify, true)
-            OpenSSL::SSL::VERIFY_PEER |
-              OpenSSL::SSL::VERIFY_FAIL_IF_NO_PEER_CERT
-          else
-            OpenSSL::SSL::VERIFY_NONE
-          end
-        end
-      end
-
-      private
-
-      def support_ciphers?(ssl_param)
-        Gem::Version.new(Faraday::VERSION) >= Gem::Version.new('2.11.0') &&
-          ssl_param.respond_to?(:ciphers=)
       end
     end
   end
