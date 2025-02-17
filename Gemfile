@@ -11,6 +11,6 @@ gem 'simplecov', '~> 0.22.0'
 
 gem 'webmock', '~> 3.4'
 
-gem 'rubocop', '~> 1.71.0'
+gem 'rubocop', '~> 1.72.2'
 gem 'rubocop-packaging', '~> 0.5'
 gem 'rubocop-performance', '~> 1.20'
