@@ -17,10 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Ruby 3.x
+      - name: Set up latest Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3
           bundler-cache: true
 
       - name: Rubocop
