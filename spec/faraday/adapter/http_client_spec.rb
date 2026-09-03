@@ -22,6 +22,47 @@ RSpec.describe Faraday::Adapter::HTTPClient do
     expect(client.ssl_config.timeout).to eq(25)
   end
 
+  context 'SSL Configuration' do
+    let(:adapter) { described_class.new }
+    let(:ssl_options) { {} }
+    let(:env) { { url: URI.parse('https://example.com'), ssl: ssl_options } }
+
+    it 'configures SSL when URL scheme is https' do
+      expect(Faraday::HTTPClient::SSLConfigurator).to receive(:configure)
+      adapter.build_connection(env)
+    end
+
+    it 'skips SSL configuration when URL scheme is not https' do
+      env[:url] = URI.parse('http://example.com')
+      expect(Faraday::HTTPClient::SSLConfigurator).not_to receive(:configure)
+      adapter.build_connection(env)
+    end
+
+    it 'skips SSL configuration when ssl options are not present' do
+      env.delete(:ssl)
+      expect(Faraday::HTTPClient::SSLConfigurator).not_to receive(:configure)
+      adapter.build_connection(env)
+    end
+
+    it 'passes SSL options to configurator' do
+      ssl_options.merge!(
+        verify: true,
+        ca_file: '/path/to/ca.pem',
+        client_cert: 'cert',
+        client_key: 'key',
+        verify_depth: 5,
+        ciphers: ['TLS_AES_256_GCM_SHA384']
+      )
+
+      expect(Faraday::HTTPClient::SSLConfigurator).to receive(:configure) do |client, ssl|
+        expect(client).to be_a(HTTPClient)
+        expect(ssl).to eq(ssl_options)
+      end
+
+      adapter.build_connection(env)
+    end
+  end
+
   context 'Options' do
     let(:request) { Faraday::RequestOptions.new }
     let(:env) { { request: request } }
