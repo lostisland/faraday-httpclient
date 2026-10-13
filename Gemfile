@@ -11,6 +11,6 @@ gem 'simplecov', RUBY_VERSION < '3.2' ? '< 1.0' : '~> 1.2.0'
 
 gem 'webmock', '~> 3.4'
 
-gem 'rubocop', '~> 1.91.0'
+gem 'rubocop', '~> 1.92.0'
 gem 'rubocop-packaging', '~> 0.5'
 gem 'rubocop-performance', '~> 1.20'
